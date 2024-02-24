@@ -5,7 +5,6 @@ class BotPanadero:
     def __init__(self):
         self.client = OpenAI(api_key=st.secrets["OpenAIAPI"]["openai_api_key"])
 
-    # Función para manejar la entrada del usuario y generar la respuesta del bot
     def communicate(self, user_input):
         messages = st.session_state.get("messages_botPanadero", [])
         messages.append({"role": "user", "content": user_input})
@@ -19,7 +18,6 @@ class BotPanadero:
 
         st.session_state["messages_botPanadero"] = messages
 
-    # Mostrar el bot Panadero
     def show_bot(self):
         st.title("Bot Panadero")
         st.write("Este es el Bot Panadero.")
@@ -39,7 +37,6 @@ class BotDesarrollador:
     def __init__(self):
         self.client = OpenAI(api_key=st.secrets["OpenAIAPI"]["openai_api_key"])
 
-    # Función para manejar la entrada del usuario y generar la respuesta del bot
     def communicate(self, user_input):
         messages = st.session_state.get("messages_botDesarrollador", [])
         messages.append({"role": "user", "content": user_input})
@@ -53,7 +50,6 @@ class BotDesarrollador:
 
         st.session_state["messages_botDesarrollador"] = messages
 
-    # Mostrar el bot Desarrollador
     def show_bot(self):
         st.title("Bot Desarrollador")
         st.write("Este es el Bot Desarrollador.")
@@ -68,3 +64,15 @@ class BotDesarrollador:
             for message in reversed(messages):
                 speaker = "😎" if message["role"] == "user" else "🤖"
                 st.write(f"{speaker}: {message['content']}")
+
+# Sidebar para seleccionar el bot
+bot_options = ["Panadero", "Desarrollador"]
+selected_bot = st.sidebar.selectbox("Selecciona un bot:", bot_options)
+
+# Mostrar el bot seleccionado
+if selected_bot == "Panadero":
+    bot_panadero = BotPanadero()
+    bot_panadero.show_bot()
+elif selected_bot == "Desarrollador":
+    bot_desarrollador = BotDesarrollador()
+    bot_desarrollador.show_bot()
