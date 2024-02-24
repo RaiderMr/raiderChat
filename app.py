@@ -5,12 +5,6 @@ from openai import OpenAI
 api_key = st.secrets["OpenAIAPI"]["openai_api_key"]
 openai = OpenAI(api_key=api_key)
 
-# Texto del prompt para el panadero
-panadero_prompt = "Eres un panadero y estás buscando nuevas recetas de pan. ¿Puedes darme algunas ideas?"
-
-# Texto del prompt para el ingeniero de sistemas
-ingeniero_prompt = "Eres un ingeniero de sistemas y estás desarrollando un nuevo software. ¿Qué características debería tener?"
-
 # Función para obtener la respuesta del chatbot
 def get_response(prompt):
     response = openai.Completions.create(
@@ -22,6 +16,8 @@ def get_response(prompt):
         max_tokens=50
     )
     return response["choices"][0]["message"]["content"]
+
+# Resto del código para la interfaz de usuario...
 
 # Sidebar para seleccionar la vista
 vista = st.sidebar.radio("Selecciona una vista", ["Chatbot", "Prompts"])
