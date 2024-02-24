@@ -23,7 +23,7 @@ def get_response(prompt):
     )
     return response["choices"][0]["message"]["content"]
 
-# Sidebar para seleccionar la vista
+# Sidebar para seleccionar la vist
 vista = st.sidebar.radio("Selecciona una vista", ["Chatbot", "Prompts"])
 
 # Mostrar la vista seleccionada
