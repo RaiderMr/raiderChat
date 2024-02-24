@@ -6,19 +6,28 @@ class BotPanadero:
         self.client = OpenAI(api_key=st.secrets["OpenAIAPI"]["openai_api_key"])
 
     # Función para manejar la entrada del usuario y generar la respuesta del bot
-    def communicate(self):
-        # Lógica de comunicación con OpenAI para Bot Panadero
-        pass
+    def communicate(self, user_input):
+        messages = st.session_state.get("messages_botPanadero", [])
+        messages.append({"role": "user", "content": user_input})
+
+        response = self.client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=messages
+        )
+        bot_message = response.choices[0].message
+        messages.append({"role": "bot", "content": bot_message})
+
+        st.session_state["messages_botPanadero"] = messages
 
     # Mostrar el bot Panadero
     def show_bot(self):
         st.title("Bot Panadero")
         st.write("Este es el Bot Panadero.")
         
-        # Aquí va la interfaz de usuario específica del Bot Panadero
-        user_input = st.text_input("Por favor, ingrese un mensaje para Bot Panadero.", key="entrada_usuario_botPanadero", on_change=self.communicate)
+        user_input = st.text_input("Por favor, ingrese un mensaje para Bot Panadero.", key="entrada_usuario_botPanadero")
+        if user_input:
+            self.communicate(user_input)
         
-        # Mostrar mensajes de Bot Panadero
         if st.session_state.get("messages_botPanadero"):
             messages = st.session_state["messages_botPanadero"]
             
@@ -31,19 +40,28 @@ class BotDesarrollador:
         self.client = OpenAI(api_key=st.secrets["OpenAIAPI"]["openai_api_key"])
 
     # Función para manejar la entrada del usuario y generar la respuesta del bot
-    def communicate(self):
-        # Lógica de comunicación con OpenAI para Bot Desarrollador
-        pass
+    def communicate(self, user_input):
+        messages = st.session_state.get("messages_botDesarrollador", [])
+        messages.append({"role": "user", "content": user_input})
+
+        response = self.client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=messages
+        )
+        bot_message = response.choices[0].message
+        messages.append({"role": "bot", "content": bot_message})
+
+        st.session_state["messages_botDesarrollador"] = messages
 
     # Mostrar el bot Desarrollador
     def show_bot(self):
         st.title("Bot Desarrollador")
         st.write("Este es el Bot Desarrollador.")
         
-        # Aquí va la interfaz de usuario específica del Bot Desarrollador
-        user_input = st.text_input("Por favor, ingrese un mensaje para Bot Desarrollador.", key="entrada_usuario_botDesarrollador", on_change=self.communicate)
+        user_input = st.text_input("Por favor, ingrese un mensaje para Bot Desarrollador.", key="entrada_usuario_botDesarrollador")
+        if user_input:
+            self.communicate(user_input)
         
-        # Mostrar mensajes de Bot Desarrollador
         if st.session_state.get("messages_botDesarrollador"):
             messages = st.session_state["messages_botDesarrollador"]
             
