@@ -22,6 +22,18 @@ def communicate():
 
     st.session_state["user_input"] = ""
 
+st.markdown(
+    """
+    <style>
+    body {
+        background-image: url('https://c8.alamy.com/compes/mbwhc7/futurista-con-fondo-blanco-hexagonal-de-forma-abstracta-ilustracion-3d-mbwhc7.jpg');
+        background-size: cover;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title ("Desarrollador AI")
 st.write ("Utilizando la API chatGPT, este chatbot ofrece capacidades conversacionales avanzadas..")
 
