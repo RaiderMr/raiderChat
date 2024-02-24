@@ -1,78 +1,47 @@
 import streamlit as st
 from openai import OpenAI
 
-class BotPanadero:
-    def __init__(self):
-        self.client = OpenAI(api_key=st.secrets["OpenAIAPI"]["openai_api_key"])
+# Credenciales de la API de OpenAI
+api_key = st.secrets["OpenAIAPI"]["openai_api_key"]
+openai = OpenAI(api_key=api_key)
 
-    def communicate(self, user_input):
-        messages = st.session_state.get("messages_botPanadero", [])
-        messages.append({"role": "user", "content": user_input})
+# Texto del prompt para el panadero
+panadero_prompt = "Eres un panadero y estás buscando nuevas recetas de pan. ¿Puedes darme algunas ideas?"
 
-        response = self.client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=messages
-        )
-        bot_message = response.choices[0].message
-        messages.append({"role": "bot", "content": bot_message})
+# Texto del prompt para el ingeniero de sistemas
+ingeniero_prompt = "Eres un ingeniero de sistemas y estás desarrollando un nuevo software. ¿Qué características debería tener?"
 
-        st.session_state["messages_botPanadero"] = messages
+# Función para obtener la respuesta del chatbot
+def get_response(prompt):
+    response = openai.Completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a customer."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=50
+    )
+    return response["choices"][0]["message"]["content"]
 
-    def show_bot(self):
-        st.title("Bot Panadero")
-        st.write("Este es el Bot Panadero.")
-        
-        user_input = st.text_input("Por favor, ingrese un mensaje para Bot Panadero.", key="entrada_usuario_botPanadero")
-        if user_input:
-            self.communicate(user_input)
-        
-        if st.session_state.get("messages_botPanadero"):
-            messages = st.session_state["messages_botPanadero"]
-            
-            for message in reversed(messages):
-                speaker = "😎" if message["role"] == "user" else "🤖"
-                st.write(f"{speaker}: {message['content']}")
+# Sidebar para seleccionar la vista
+vista = st.sidebar.radio("Selecciona una vista", ["Chatbot", "Prompts"])
 
-class BotDesarrollador:
-    def __init__(self):
-        self.client = OpenAI(api_key=st.secrets["OpenAIAPI"]["openai_api_key"])
-
-    def communicate(self, user_input):
-        messages = st.session_state.get("messages_botDesarrollador", [])
-        messages.append({"role": "user", "content": user_input})
-
-        response = self.client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=messages
-        )
-        bot_message = response.choices[0].message
-        messages.append({"role": "bot", "content": bot_message})
-
-        st.session_state["messages_botDesarrollador"] = messages
-
-    def show_bot(self):
-        st.title("Bot Desarrollador")
-        st.write("Este es el Bot Desarrollador.")
-        
-        user_input = st.text_input("Por favor, ingrese un mensaje para Bot Desarrollador.", key="entrada_usuario_botDesarrollador")
-        if user_input:
-            self.communicate(user_input)
-        
-        if st.session_state.get("messages_botDesarrollador"):
-            messages = st.session_state["messages_botDesarrollador"]
-            
-            for message in reversed(messages):
-                speaker = "😎" if message["role"] == "user" else "🤖"
-                st.write(f"{speaker}: {message['content']}")
-
-# Sidebar para seleccionar el bot
-bot_options = ["Panadero", "Desarrollador"]
-selected_bot = st.sidebar.selectbox("Selecciona un bot:", bot_options)
-
-# Mostrar el bot seleccionado
-if selected_bot == "Panadero":
-    bot_panadero = BotPanadero()
-    bot_panadero.show_bot()
-elif selected_bot == "Desarrollador":
-    bot_desarrollador = BotDesarrollador()
-    bot_desarrollador.show_bot()
+# Mostrar la vista seleccionada
+if vista == "Chatbot":
+    st.title("Chatbot GPT-3.5-turbo")
+    st.write("¡Hola! Soy un chatbot GPT-3.5-turbo. ¿En qué puedo ayudarte?")
+    user_input = st.text_input("Escribe tu mensaje")
+    if user_input:
+        st.write("Usuario:", user_input)
+        response = get_response(user_input)
+        st.write("Chatbot:", response)
+elif vista == "Prompts":
+    st.title("Prompts")
+    st.write("Selecciona un prompt:")
+    prompt_seleccionado = st.selectbox("Selecciona un prompt", ["Panadero", "Ingeniero de sistemas"])
+    if prompt_seleccionado == "Panadero":
+        st.write("Prompt para el panadero:")
+        st.code(panadero_prompt, language="text")
+    elif prompt_seleccionado == "Ingeniero de sistemas":
+        st.write("Prompt para el ingeniero de sistemas:")
+        st.code(ingeniero_prompt, language="text")
