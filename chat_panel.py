@@ -5,9 +5,8 @@ class BotPanadero:
     def __init__(self):
         self.client = OpenAI(api_key=st.secrets["OpenAIAPI"]["openai_api_key"])
 
-    # Función para manejar la entrada del usuario y generar la respuesta del bot
     def communicate(self, user_input):
-        messages = st.session_state.get("messages_botPanadero", [])
+        messages = [{"role": "system", "content": "Piensa como un panadero"}]
         messages.append({"role": "user", "content": user_input})
 
         response = self.client.chat.completions.create(
@@ -17,20 +16,15 @@ class BotPanadero:
         bot_message = response.choices[0].message
         messages.append({"role": "bot", "content": bot_message})
 
-        st.session_state["messages_botPanadero"] = messages
+        return messages
 
-    # Mostrar el bot Panadero
     def show_bot(self):
         st.title("Bot Panadero")
-        st.write("Este es el Bot Panadero.")
-        
-        user_input = st.text_input("Por favor, ingrese un mensaje para Bot Panadero.", key="entrada_usuario_botPanadero")
+        st.write("Utilizando la API chatGPT, este chatbot ofrece capacidades conversacionales avanzadas..")
+
+        user_input = st.text_input("Por favor, ingrese un mensaje aquí.", key="user_input_botPanadero")
         if user_input:
-            self.communicate(user_input)
-        
-        if st.session_state.get("messages_botPanadero"):
-            messages = st.session_state["messages_botPanadero"]
-            
+            messages = self.communicate(user_input)
             for message in reversed(messages):
                 speaker = "😎" if message["role"] == "user" else "🤖"
                 st.write(f"{speaker}: {message['content']}")
@@ -39,9 +33,8 @@ class BotDesarrollador:
     def __init__(self):
         self.client = OpenAI(api_key=st.secrets["OpenAIAPI"]["openai_api_key"])
 
-    # Función para manejar la entrada del usuario y generar la respuesta del bot
     def communicate(self, user_input):
-        messages = st.session_state.get("messages_botDesarrollador", [])
+        messages = [{"role": "system", "content": "Piensa como un ingeniero de software"}]
         messages.append({"role": "user", "content": user_input})
 
         response = self.client.chat.completions.create(
@@ -51,20 +44,16 @@ class BotDesarrollador:
         bot_message = response.choices[0].message
         messages.append({"role": "bot", "content": bot_message})
 
-        st.session_state["messages_botDesarrollador"] = messages
+        return messages
 
-    # Mostrar el bot Desarrollador
     def show_bot(self):
         st.title("Bot Desarrollador")
-        st.write("Este es el Bot Desarrollador.")
-        
-        user_input = st.text_input("Por favor, ingrese un mensaje para Bot Desarrollador.", key="entrada_usuario_botDesarrollador")
+        st.write("Utilizando la API chatGPT, este chatbot ofrece capacidades conversacionales avanzadas..")
+
+        user_input = st.text_input("Por favor, ingrese un mensaje aquí.", key="user_input_botDesarrollador")
         if user_input:
-            self.communicate(user_input)
-        
-        if st.session_state.get("messages_botDesarrollador"):
-            messages = st.session_state["messages_botDesarrollador"]
-            
+            messages = self.communicate(user_input)
             for message in reversed(messages):
                 speaker = "😎" if message["role"] == "user" else "🤖"
                 st.write(f"{speaker}: {message['content']}")
+
