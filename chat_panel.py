@@ -20,7 +20,6 @@ class BotPanadero:
 
     def show_bot(self):
         st.title("Bot Panadero")
-        st.write("Utilizando la API chatGPT, este chatbot ofrece capacidades conversacionales avanzadas..")
 
         user_input = st.text_input("Por favor, ingrese un mensaje aquí.", key="user_input_botPanadero")
         if user_input:
@@ -48,7 +47,6 @@ class BotDesarrollador:
 
     def show_bot(self):
         st.title("Bot Desarrollador")
-        st.write("Utilizando la API chatGPT, este chatbot ofrece capacidades conversacionales avanzadas..")
 
         user_input = st.text_input("Por favor, ingrese un mensaje aquí.", key="user_input_botDesarrollador")
         if user_input:
